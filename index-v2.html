@@ -619,24 +619,97 @@
             }
         }
 
+        // function displayResults(data) {
+        //     document.getElementById('totalClientes').textContent = data.summary.totalClientes;
+        //     document.getElementById('totalCompras').textContent = data.summary.totalCompras;
+        //     document.getElementById('montoTotal').textContent = '$' + data.summary.montoTotalCompras.toFixed(2);
+        //     document.getElementById('promedioCompra').textContent = '$' + data.summary.promedioCompra.toFixed(2);
+
+        //     displayClientsChart(data.clients);
+        //     displaySegmentChart(data.segments);
+        //     displayProductsChart(data.products);
+        //     displayMonthlyChart(data.monthly);
+
+        //     displayClientsTable(data.clients);
+        //     displayProductsTable(data.products);
+        //     displaySegmentsTable(data.segments);
+        //     displayMonthlyTable(data.monthly);
+
+        //     document.getElementById('resultsSection').classList.add('show');
+        // }
+
         function displayResults(data) {
-            document.getElementById('totalClientes').textContent = data.summary.totalClientes;
-            document.getElementById('totalCompras').textContent = data.summary.totalCompras;
-            document.getElementById('montoTotal').textContent = '$' + data.summary.montoTotalCompras.toFixed(2);
-            document.getElementById('promedioCompra').textContent = '$' + data.summary.promedioCompra.toFixed(2);
 
-            displayClientsChart(data.clients);
-            displaySegmentChart(data.segments);
-            displayProductsChart(data.products);
-            displayMonthlyChart(data.monthly);
+    currentAnalysis = data;
 
-            displayClientsTable(data.clients);
-            displayProductsTable(data.products);
-            displaySegmentsTable(data.segments);
-            displayMonthlyTable(data.monthly);
+    document.getElementById(
+        'totalClientes'
+    ).textContent =
+        data.summary.totalClientes;
 
-            document.getElementById('resultsSection').classList.add('show');
-        }
+    document.getElementById(
+        'totalCompras'
+    ).textContent =
+        data.summary.totalCompras;
+
+    document.getElementById(
+        'montoTotal'
+    ).textContent =
+        '$' +
+        data.summary
+            .montoTotalCompras
+            .toFixed(2);
+
+    document.getElementById(
+        'promedioCompra'
+    ).textContent =
+        '$' +
+        data.summary
+            .promedioCompra
+            .toFixed(2);
+
+    createDynamicTable(
+        'clientsTable',
+        data.clients
+    );
+
+    createDynamicTable(
+        'productsTable',
+        data.products
+    );
+
+    createDynamicTable(
+        'segmentsTable',
+        data.segments
+    );
+
+    createDynamicTable(
+        'monthlyTable',
+        data.monthly
+    );
+
+    displayClientsChart(
+        data.clients
+    );
+
+    displayProductsChart(
+        data.products
+    );
+
+    displaySegmentChart(
+        data.segments
+    );
+
+    displayMonthlyChart(
+        data.monthly
+    );
+
+    document
+        .getElementById(
+            'resultsSection'
+        )
+        .classList.add('show');
+}
 
         function displayClientsChart(clients) {
             const top10 = clients.slice(0, 10);
@@ -779,6 +852,74 @@
                 `;
             });
         }
+
+function createDynamicTable(
+    tableId,
+    data
+) {
+
+    if (!data || !data.length)
+        return;
+
+    const table =
+        document.getElementById(
+            tableId
+        );
+
+    const thead =
+        table.querySelector('thead');
+
+    const tbody =
+        table.querySelector('tbody');
+
+    thead.innerHTML = '';
+    tbody.innerHTML = '';
+
+    const columns =
+        Object.keys(data[0]);
+
+    const headerRow =
+        document.createElement('tr');
+
+    columns.forEach(col => {
+
+        const th =
+            document.createElement('th');
+
+        th.textContent = col;
+
+        headerRow.appendChild(th);
+    });
+
+    thead.appendChild(headerRow);
+
+    data.forEach(row => {
+
+        const tr =
+            document.createElement('tr');
+
+        columns.forEach(col => {
+
+            const td =
+                document.createElement('td');
+
+            let value = row[col];
+
+            if (
+                Array.isArray(value)
+            ) {
+                value =
+                    value.join(', ');
+            }
+
+            td.textContent = value;
+
+            tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+    });
+}
 
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
