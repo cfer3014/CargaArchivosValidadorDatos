@@ -18,7 +18,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
-app.use(express.static('public'));
+app.use(express.static('Public'));
 
 // Cache en memoria
 const analysisCache = new Map();
