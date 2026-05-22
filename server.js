@@ -8,7 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import ExcelJS from 'exceljs';
 import { Readable } from 'stream';
-import PDFDocument from 'pdfkit';
+// import PDFDocument from 'pdfkit'; // No se usa actualmente
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -564,9 +564,11 @@ app.get('/api/analysis-history', (req, res) => {
 
 // Ruta raíz para servir index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'Public', 'index.html'));
 });
-const PORT = process.env.PORT || 3001;
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor ejecutándose en puerto ${PORT}`);
+  console.log(`Accede a http://localhost:${PORT}`);
 });
